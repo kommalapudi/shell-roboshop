@@ -2,6 +2,8 @@
 
 SG_ID="sg-0cecc7f37156227f4"
 AMI_ID="ami-0220d79f3f480ecf5"
+ZONE_ID="Z004782564HOFLM6URBO"
+DOMAIN_NAME="kcdevops.online"
 
 for instance in $@
 do
@@ -30,4 +32,26 @@ do
     fi
 
     echo "IP Address of $instance is $IP"
+
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id "$ZONE_ID" \
+    --change-batch '{
+        "Comment": "Updating DNS record to new IP address",
+        "Changes": [
+            {
+                "Action": "UPSERT",
+                "ResourceRecordSet": {
+                    "Name": "$instance.$DOMAIN_NAME",
+                    "Type": "A",
+                    "TTL": 300,
+                    "ResourceRecords": [
+                        {
+                            "Value": "'$IP'"
+                        }
+                    ]
+                }
+            }
+        ]
+    }'
+
 done
