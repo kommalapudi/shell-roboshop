@@ -29,4 +29,6 @@ do
             --output text 
         )
     fi
+
+    echo "IP Address of $instance is $IP"
 done
