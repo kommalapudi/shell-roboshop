@@ -47,3 +47,14 @@ VALIDATE $? "creating /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> "$LOGS_FILE"
 VALIDATE $? "downloading catalogue component"
+
+cd /app
+VALIDATE $? "changing directory to /app"
+
+unzip /tmp/catalogue.zip
+VALIDATE $? "unzipping catalogue component"
+
+npm install
+VALIDATE $? "installing nodejs dependencies"
+
+
