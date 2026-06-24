@@ -57,4 +57,12 @@ VALIDATE $? "unzipping catalogue component"
 npm install
 VALIDATE $? "installing nodejs dependencies"
 
+cp catalogue.service /etc/systemd/system/catalogue.service &>> "$LOGS_FILE"
+VALIDATE $? "copying catalogue systemd service file"
+
+systemctl daemon-reload
+systemctl enable catalogue 
+systemctl start catalogue
+VALIDATE $? "starting and enabling catalogue service"
+
 
