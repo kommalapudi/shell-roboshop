@@ -43,7 +43,7 @@ do
                 "ResourceRecordSet": {
                     "Name": "$instance.$DOMAIN_NAME",
                     "Type": "A",
-                    "TTL": 300,
+                    "TTL": 1,
                     "ResourceRecords": [
                         {
                             "Value": "'$IP'"
