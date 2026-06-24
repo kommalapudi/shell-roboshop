@@ -7,6 +7,7 @@ R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
+SCRIPT_DIR=$PWD
 
 if [ "$USERID" -ne 0 ]; then
     echo -e "$R Please run as root $N" | tee -a "$LOGS_FILE"
@@ -60,7 +61,7 @@ VALIDATE $? "unzipping catalogue component"
 npm install
 VALIDATE $? "installing nodejs dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service &>> "$LOGS_FILE"
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>> "$LOGS_FILE"
 VALIDATE $? "copying catalogue systemd service file"
 
 systemctl daemon-reload
