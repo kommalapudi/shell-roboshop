@@ -8,7 +8,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
-$MONGODB_HOST="mongodb.kcdevops.online"
+MONGODB_HOST="mongodb.kcdevops.online"
 
 if [ "$USERID" -ne 0 ]; then
     echo -e "$R Please run as root $N" | tee -a "$LOGS_FILE"
@@ -73,6 +73,15 @@ VALIDATE $? "starting and enabling catalogue service"
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>> "$LOGS_FILE"
 dnf install mongodb-mongosh -y &>> "$LOGS_FILE"
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js
+INDEX=$(mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
+if [ $INDEX -le 0 ]; then
+    mongosh --host $MONGODB_HOST </app/db/master-data.js
+    VALIDATE $? "Loading products"
+else
+    echo -e "Products already loaded ... $Y SKIPPING $N"
+fi
+
+systemctl restart catalogue
+VALIDATE $? "restarting catalogue service"
 
