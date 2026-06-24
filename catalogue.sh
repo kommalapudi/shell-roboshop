@@ -8,6 +8,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
+$MONGODB_HOST="mongodb.kcdevops.online"
 
 if [ "$USERID" -ne 0 ]; then
     echo -e "$R Please run as root $N" | tee -a "$LOGS_FILE"
@@ -68,5 +69,10 @@ systemctl daemon-reload
 systemctl enable catalogue 
 systemctl start catalogue
 VALIDATE $? "starting and enabling catalogue service"
+
+cp $SCRIPT_DIR/mmongo.repo etc/yum.repos.d/mongo.repo &>> "$LOGS_FILE"
+dnf install mongodb-mongosh -y &>> "$LOGS_FILE"
+
+mongosh --host $MONGODB_HOST </app/db/master-data.js
 
 
