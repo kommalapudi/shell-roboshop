@@ -22,6 +22,7 @@ do
             --query 'Reservations[0].Instances[0].PublicIpAddress' \
             --output text 
         )
+        RECORD_NAME="$DOMAIN_NAME" # kcdevops.online
     else
         IP=$( 
             aws ec2 describe-instances \
@@ -29,6 +30,7 @@ do
             --query 'Reservations[0].Instances[0].PrivateIpAddress' \
             --output text 
         )
+        RECORD_NAME="$instance.$DOMAIN_NAME" # component.kcdevops.online
     fi
 
     echo "IP Address of $instance is $IP"
@@ -36,12 +38,12 @@ do
     aws route53 change-resource-record-sets \
     --hosted-zone-id "$ZONE_ID" \
     --change-batch '{
-        "Comment": "Updating DNS record to new IP address",
+        "Comment": "Updating DNS record",
         "Changes": [
             {
                 "Action": "UPSERT",
                 "ResourceRecordSet": {
-                    "Name": "$instance.$DOMAIN_NAME",
+                    "Name": "'$RECORD_NAME'",
                     "Type": "A",
                     "TTL": 1,
                     "ResourceRecords": [
@@ -53,5 +55,7 @@ do
             }
         ]
     }'
+
+    echo "record updated for $instance"
 
 done
