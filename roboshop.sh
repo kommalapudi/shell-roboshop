@@ -5,7 +5,13 @@ AMI_ID="ami-0220d79f3f480ecf5"
 ZONE_ID="Z004782564HOFLM6URBO"
 DOMAIN_NAME="kcdevops.online"
 
-for instance in $@
+if ! command -v aws >/dev/null 2>&1; then
+    echo "ERROR: AWS CLI is not installed or not in PATH."
+    echo "Install AWS CLI and retry: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html"
+    exit 1
+fi
+
+for instance in "$@"
 do
     INSTANCE_ID=$( aws ec2 run-instances \
     --image-id $AMI_ID \
