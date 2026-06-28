@@ -29,7 +29,7 @@ VALIDATE(){
 dnf install maven -y &>> "$LOGS_FILE"
 VALIDATE $? "installing maven"
 
-d roboshop &>> "$LOGS_FILE"
+id roboshop &>> "$LOGS_FILE"
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> "$LOGS_FILE"
     VALIDATE $? "creating roboshop user"
