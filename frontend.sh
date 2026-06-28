@@ -38,9 +38,9 @@ VALIDATE $? "starting and enabling nginx service"
 rm -rf /usr/share/nginx/html/* 
 VALIDATE $? "removing old nginx content"
 
-curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>> "$LOGS_FILE"
 cd /usr/share/nginx/html 
-unzip /tmp/frontend.zip
+unzip /tmp/frontend.zip &>> "$LOGS_FILE"
 VALIDATE $? "Downloading and unzipping frontend content"
 
 rm -rf /etc/nginx/nginx.conf
