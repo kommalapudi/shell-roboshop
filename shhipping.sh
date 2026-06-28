@@ -46,7 +46,7 @@ VALIDATE $? "downloading shipping component"
 cd /app 
 VALIDATE $? "changing directory to /app"
 
-rm -rf /app/* &>>$LOGS_FILE
+rm -rf /app/* &>> "$LOGS_FILE"
 VALIDATE $? "removing old shipping content"
 
 unzip /tmp/shipping.zip &>> "$LOGS_FILE"
